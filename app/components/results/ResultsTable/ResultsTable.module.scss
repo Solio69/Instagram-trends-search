@@ -1,0 +1,35 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.results-table {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  th, td { border-top: 1px solid t.$table-row-line; text-align: left; vertical-align: middle; }
+  th { height: 49px; background: t.$pale; color: t.$table-head-text; font-size: t.$font-11; font-weight: t.$font-weight-heavy; letter-spacing: .025em; padding: 12px 14px; }
+  td { height: 75px; font-size: t.$font-12; padding: 13px 14px; }
+  &__scroll { overflow-x: auto; outline: none; &:focus-visible { box-shadow: inset 0 0 0 3px t.$focus-inner; } }
+  &__index { width: 46px; text-align: center !important; padding-left: 8px !important; padding-right: 8px !important; }
+  &__post { width: 34%; padding-left: 24px !important; }
+  &__numeric { width: 10%; text-align: right !important; }
+  &__sort {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: t.$font-11;
+    font-weight: t.$font-weight-heavy;
+    text-align: right;
+    white-space: nowrap;
+    padding: 4px 0;
+    cursor: pointer;
+    &:hover { color: t.$sort-hover; }
+    &:focus-visible { @include m.focus-ring; }
+    span { margin-left: 3px; font-size: t.$font-13; }
+    &--active { color: t.$sort-active; }
+    &--date { text-align: left; }
+  }
+  &__empty { height: 128px !important; color: t.$filter-hint !important; font-size: t.$font-13 !important; text-align: left; padding-left: 24px !important; }
+}

@@ -1,0 +1,9 @@
+@use "styles/tokens" as t;
+
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html { min-width: 320px; scroll-behavior: smooth; }
+body { margin: 0; background: t.$body-bg; color: t.$ink; font-family: t.$font-family-base; }
+button, input, textarea, select { font: inherit; }
+a { color: inherit; }
+h1, h2, h3, h4, p { margin-top: 0; }

@@ -1,0 +1,27 @@
+@use "tokens" as t;
+
+@mixin focus-ring {
+  outline: 3px solid t.$focus;
+  outline-offset: 3px;
+}
+
+@mixin field-title {
+  display: block;
+  margin-bottom: 10px;
+  font-size: t.$font-13;
+  font-weight: t.$font-weight-heavy;
+}
+
+@mixin card($line: t.$line, $radius: 10px, $background: t.$white) {
+  border: 1px solid $line;
+  border-radius: $radius;
+  background: $background;
+}
+
+@mixin pill($line: t.$line, $background: t.$white) {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid $line;
+  border-radius: 999px;
+  background: $background;
+}

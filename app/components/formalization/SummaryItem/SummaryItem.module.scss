@@ -1,0 +1,13 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  @include m.card(t.$formal-card-line, 10px, t.$white);
+  padding: 13px 14px;
+  &__label { color: t.$formal-item-label; font-size: t.$font-10; font-weight: t.$font-weight-bold; text-transform: uppercase; letter-spacing: .08em; }
+  &__value { font-size: t.$font-13; line-height: 1.35; }
+}

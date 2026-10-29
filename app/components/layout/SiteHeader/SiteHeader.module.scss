@@ -1,0 +1,15 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 82px;
+
+  &__brand { display: inline-flex; align-items: center; gap: 4px; color: t.$ink; font-size: t.$font-25; font-weight: t.$font-weight-heavy; letter-spacing: -1.4px; text-decoration: none; &:focus-visible { @include m.focus-ring; } }
+  &__mark { display: grid; width: 34px; height: 34px; margin-right: 8px; place-items: center; border-radius: 10px; background: t.$accent; color: t.$white; font-size: t.$font-25; }
+  &__accent { color: t.$accent; }
+}
+
+@media (max-width: 740px) { .site-header { min-height: 72px; } }

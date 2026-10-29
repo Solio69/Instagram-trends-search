@@ -1,0 +1,16 @@
+@use "../../../styles/tokens" as t;
+
+.site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 76px;
+  gap: 20px;
+  border-top: 1px solid t.$line;
+  color: t.$footer-muted;
+  font-size: t.$font-12;
+  &__brand { color: t.$ink; font-size: t.$font-18; letter-spacing: -.8px; span { color: t.$accent; } }
+  &__note { margin: 0; }
+}
+
+@media (max-width: 740px) { .site-footer { align-items: flex-start; flex-direction: column; justify-content: center; gap: 8px; padding: 17px 0; } }

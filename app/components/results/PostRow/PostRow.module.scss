@@ -1,0 +1,23 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.post-row {
+  &:hover { background: t.$surface-hover; }
+  & &__index { width: 46px; color: t.$results-count; font-variant-numeric: tabular-nums; text-align: center; padding-left: 8px; padding-right: 8px; }
+  & &__post { width: 34%; padding-left: 24px; }
+  &__link { display: flex; align-items: start; gap: 8px; color: t.$post-link; font-size: t.$font-12; font-weight: t.$font-weight-bold; line-height: 1.4; text-decoration: none; &:hover { text-decoration: underline; } &:focus-visible { @include m.focus-ring; } }
+  &__caption { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow-wrap: anywhere; }
+  &__arrow { flex: none; color: t.$post-arrow; }
+  &__author { display: block; margin-top: 6px; color: t.$post-author; font-size: t.$font-11; }
+  &__format { display: inline-block; border-radius: 6px; background: t.$format-reel-bg; color: t.$format-reel-text; font-size: t.$font-11; font-weight: t.$font-weight-heavy; padding: 6px 8px;
+    &--carousel { background: t.$format-carousel-bg; color: t.$format-carousel-text; }
+    &--image { background: t.$format-image-bg; color: t.$format-image-text; }
+  }
+  & &__date { color: t.$date-text; white-space: nowrap; }
+  &__match { display: flex; flex-direction: column; align-items: start; gap: 5px; }
+  &__matched-term { color: t.$match-text; font-weight: t.$font-weight-bold; }
+  &__discovery { color: t.$match-meta; font-size: t.$font-11; }
+  & &__numeric { color: t.$numeric-text; font-variant-numeric: tabular-nums; text-align: right;
+    &--emphasized { color: t.$numeric-emphasis; font-weight: t.$font-weight-heavy; }
+  }
+}

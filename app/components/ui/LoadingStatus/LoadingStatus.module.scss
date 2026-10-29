@@ -1,0 +1,31 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.loading-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 74px;
+  margin-top: 26px;
+  @include m.card(t.$loading-line, 13px, t.$loading-bg);
+  color: t.$loading-text;
+  font-size: t.$font-13;
+  font-weight: t.$font-weight-bold;
+  padding: 18px 20px;
+
+  &__spinner {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid t.$spinner-track;
+    border-top-color: t.$accent;
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-status__spinner { animation-duration: 2s; }
+}
