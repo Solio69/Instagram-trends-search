@@ -1,0 +1,11 @@
+{
+  "exampleInput": "Хочу увидеть тренды в healthy нише",
+  "intent": "Здоровый образ жизни",
+  "languages": ["Русский", "Английский"],
+  "topics": [
+    {"name": "Фитнес", "terms": ["фитнес", "тренировки", "fitness", "workout"]},
+    {"name": "Питание", "terms": ["правильное питание", "пп рецепты", "healthy eating", "nutrition"]},
+    {"name": "Здоровье", "terms": ["здоровье", "зож", "wellness", "healthy lifestyle"]}
+  ],
+  "contentTypes": ["Reels", "Карусели", "Посты"]
+}

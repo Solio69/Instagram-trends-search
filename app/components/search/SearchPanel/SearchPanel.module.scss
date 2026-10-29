@@ -1,0 +1,20 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.search-panel {
+  position: relative;
+  z-index: 2;
+  margin-top: -28px;
+  padding: 0 32px;
+
+  &__form { @include m.card(t.$line, 22px, t.$white); box-shadow: 0 20px 65px rgba(t.$shadow-strong, .09); padding: 32px; }
+  &__heading { margin-bottom: 26px; }
+  &__eyebrow { margin-bottom: 9px; color: t.$section-kicker; font-size: t.$font-11; font-weight: t.$font-weight-heavy; letter-spacing: .15em; text-transform: uppercase; }
+  &__title { margin-bottom: 0; font-size: clamp(t.$font-25, 3vw, t.$font-32); line-height: 1.18; letter-spacing: -.04em; }
+  &__controls { display: flex; align-items: start; flex-wrap: wrap; gap: 24px; margin-top: 27px; border-top: 1px solid t.$line; padding-top: 24px; }
+  &__submit { margin-top: 26px; }
+  &__jump { display: inline-flex; margin-top: 24px; color: t.$accent-link; font-size: t.$font-13; font-weight: t.$font-weight-heavy; text-decoration: none; &:hover { text-decoration: underline; } &:focus-visible { @include m.focus-ring; } }
+}
+
+@media (max-width: 1000px) { .search-panel { padding: 0 20px; } }
+@media (max-width: 740px) { .search-panel { margin-top: -24px; padding: 0 10px; &__form { padding: 22px; } &__controls { flex-direction: column; gap: 24px; } } }

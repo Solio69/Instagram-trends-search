@@ -1,0 +1,24 @@
+@use "../../../styles/tokens" as t;
+
+.hero {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  overflow: hidden;
+  min-height: 340px;
+  margin-top: 14px;
+  border-radius: 28px;
+  background: radial-gradient(circle at 90% 20%, t.$hero-glow 0, transparent 31%), linear-gradient(120deg, t.$hero-start 0%, t.$hero-middle 58%, t.$hero-end 100%);
+  color: t.$white;
+  padding: 62px 65px;
+
+  &::after { content: ""; position: absolute; top: -125px; right: -90px; width: 360px; height: 360px; border: 1px solid rgba(t.$white, .13); border-radius: 50%; box-shadow: 0 0 0 72px rgba(t.$white, .03), 0 0 0 144px rgba(t.$white, .02); pointer-events: none; }
+  &__copy { position: relative; z-index: 1; }
+  &__eyebrow { margin-bottom: 17px; color: t.$hero-eyebrow; font-size: t.$font-11; font-weight: t.$font-weight-heavy; letter-spacing: .15em; text-transform: uppercase; }
+  &__title { max-width: 750px; margin-bottom: 17px; font-size: clamp(t.$font-38, 4.3vw, t.$font-59); line-height: 1.08; letter-spacing: -.055em; }
+  &__description { max-width: 690px; margin: 0; color: t.$hero-description; font-size: t.$font-15; line-height: 1.65; }
+}
+
+@media (max-width: 1000px) { .hero { padding: 56px 42px; } }
+@media (max-width: 740px) { .hero { min-height: 0; margin-top: 8px; border-radius: 20px; padding: 40px 24px 65px; &__description { font-size: t.$font-14; } } }

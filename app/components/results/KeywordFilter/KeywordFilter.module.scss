@@ -1,0 +1,33 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.keyword-filter {
+  border-top: 1px solid t.$line;
+  background: t.$surface-soft;
+  padding: 13px 24px;
+
+  &__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    list-style: none;
+    color: t.$filter-title;
+    font-size: t.$font-12;
+    font-weight: t.$font-weight-heavy;
+    cursor: pointer;
+    &::-webkit-details-marker { display: none; }
+    &:focus-visible { @include m.focus-ring; }
+  }
+  &__count { @include m.pill(t.$notice-line); color: t.$sort-text; font-size: t.$font-11; padding: 6px 9px; }
+  &__arrow { color: t.$filter-arrow; transition: transform .2s ease; }
+  &__details[open] &__arrow { transform: rotate(180deg); }
+  &__content { padding-top: 17px; }
+  &__hint { margin-bottom: 15px; color: t.$filter-hint; font-size: t.$font-12; }
+  &__groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  &__group { min-width: 0; margin: 0; @include m.card(t.$formal-card-line); padding: 11px 14px 13px; }
+  &__group-title { color: t.$filter-group; font-size: t.$font-12; font-weight: t.$font-weight-heavy; padding: 0 4px; }
+  &__option { display: flex; align-items: center; gap: 8px; min-height: 31px; color: t.$filter-option; font-size: t.$font-12; cursor: pointer; }
+  &__checkbox { flex: none; width: 16px; height: 16px; margin: 0; accent-color: t.$accent; &:focus-visible { @include m.focus-ring; } }
+}
+
+@media (max-width: 740px) { .keyword-filter__groups { grid-template-columns: 1fr; } }

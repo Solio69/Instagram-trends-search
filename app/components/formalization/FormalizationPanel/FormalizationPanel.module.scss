@@ -1,0 +1,25 @@
+@use "../../../styles/tokens" as t;
+@use "../../../styles/mixins" as m;
+
+.formalization-panel {
+  margin-top: 27px;
+  @include m.card(t.$loading-line, 16px, t.$surface-soft);
+  background: linear-gradient(145deg, t.$loading-bg, t.$surface-soft 75%);
+  padding: 24px;
+
+  &__top { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
+  &__eyebrow { margin-bottom: 9px; color: t.$section-kicker; font-size: t.$font-11; font-weight: t.$font-weight-heavy; letter-spacing: .15em; text-transform: uppercase; }
+  &__title { margin: 0; font-size: t.$font-20; letter-spacing: -.03em; }
+  &__badge { flex: none; border: 1px solid t.$formal-badge-line; border-radius: 999px; background: t.$white; color: t.$formal-badge-text; font-size: t.$font-11; font-weight: t.$font-weight-bold; padding: 8px 10px; }
+  &__sample { margin: 12px 0 19px; color: t.$formal-sample; font-size: t.$font-13; }
+  &__summary { display: grid; grid-template-columns: 1fr .8fr 1fr; gap: 10px; margin-bottom: 13px; }
+  &__topics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+}
+
+@media (max-width: 740px) {
+  .formalization-panel {
+    padding: 18px;
+    &__top { align-items: start; flex-direction: column; }
+    &__summary, &__topics { grid-template-columns: 1fr; }
+  }
+}

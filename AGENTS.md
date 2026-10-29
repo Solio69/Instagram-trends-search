@@ -34,7 +34,7 @@ These rules apply to development tasks in this repository. Follow the current us
 - Follow any stricter project Git policy. Never include someone else's changes in your commit.
 
 <!-- SPECKIT START -->
-For the current UI task, read `specs/001-niche-results-ui/plan.md` for the
+For the current UI task, read `specs/002-ui-components/plan.md` for the
 technology, project structure, checks, and scope.
 <!-- SPECKIT END -->
 
