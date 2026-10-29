@@ -1,11 +1,19 @@
 ---
-name: "speckit-implement"
-description: "Execute the implementation plan by processing and executing all tasks defined in tasks.md"
-compatibility: "Requires spec-kit project structure with .specify/ directory"
+name: speckit-implement
+description: Execute the implementation plan by processing and executing all tasks
+  defined in tasks.md
+compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
-  author: "github-spec-kit"
-  source: "templates/commands/implement.md"
+  author: github-spec-kit
+  source: preset:codex-code-workflow
 ---
+
+# Speckit Implement Skill
+
+## Standing requirements for this preset
+
+Before changing production behavior, verify the corresponding automated test fails for the expected behavior gap (Red). Then make the smallest implementation pass (Green), refactor if useful, and rerun affected tests. Keep test and production changes within the agreed `spec.md` scope. If no meaningful executable behavior changes, use the alternative verification documented in `plan.md`; do not create a test solely to satisfy a ritual. Record final commands and results in `verification.md` with Passed, Failed, Blocked, or NotRun. A missing tool, import error, or broken environment is Blocked, not a successful Red. The official implementation workflow follows below.
+
 
 
 ## User Input
@@ -173,7 +181,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Validate that tests pass and coverage meets requirements
    - Confirm the implementation follows the technical plan
 
-Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit-tasks` first to regenerate the task list.
+Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `__SPECKIT_COMMAND_TASKS__` first to regenerate the task list.
 
 ## Mandatory Post-Execution Hooks
 
