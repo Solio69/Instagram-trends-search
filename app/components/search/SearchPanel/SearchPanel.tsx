@@ -1,13 +1,16 @@
+import { BUTTON_TYPE, ROLE_PROPS } from "../../../constants/dom";
+import { ICONS } from "../../../constants/icons";
+import { NICHE_REQUEST_STATUS } from "../../../constants/niche-request";
 import { FORMAT_OPTIONS, PERIOD_OPTIONS } from "../../../constants/options";
-import { canStartDemo, type DemoView } from "../../../lib/demo-flow";
+import type { NicheRequestState } from "../../../lib/niche-request-state";
 import type { ContentFilter, PeriodDays } from "../../../lib/results";
 import { FormalizationPanel } from "../../formalization/FormalizationPanel";
-import { ActionButton } from "../../ui/ActionButton";
-import { LoadingStatus } from "../../ui/LoadingStatus";
+import { ActionButton, BUTTON_ICON_POSITION } from "../../ui/ActionButton";
+import { LOADING_STAGE, LoadingStatus } from "../../ui/LoadingStatus";
 import { NicheInput } from "../../ui/NicheInput";
 import { ResultLimitField } from "../../ui/ResultLimitField";
 import { SegmentedControl } from "../../ui/SegmentedControl";
-import { SEARCH_COPY as copy } from "./constants";
+import { SEARCH_COPY } from "./constants";
 import styles from "./SearchPanel.module.scss";
 
 type SearchPanelProps = {
@@ -15,7 +18,7 @@ type SearchPanelProps = {
   periodDays: PeriodDays;
   contentFilter: ContentFilter;
   limitInput: string;
-  view: DemoView;
+  request: NicheRequestState;
   onNicheChange: (value: string) => void;
   onPeriodChange: (value: PeriodDays) => void;
   onContentFilterChange: (value: ContentFilter) => void;
@@ -24,26 +27,115 @@ type SearchPanelProps = {
   onSubmit: () => void;
 };
 
-export function SearchPanel({ niche, periodDays, contentFilter, limitInput, view, onNicheChange, onPeriodChange, onContentFilterChange, onLimitChange, onLimitCommit, onSubmit }: SearchPanelProps) {
-  return <section className={styles["search-panel"]} aria-label={copy.sectionAria}>
-    <form className={styles["search-panel__form"]} onSubmit={(event) => { event.preventDefault(); onSubmit(); }}>
-      <div className={styles["search-panel__heading"]}>
-        <p className={styles["search-panel__eyebrow"]}>{copy.eyebrow}</p>
-        <h2 className={styles["search-panel__title"]}>{copy.title}</h2>
-      </div>
-      <NicheInput value={niche} onChange={onNicheChange} />
-      <div className={styles["search-panel__controls"]}>
-        <SegmentedControl legend={copy.period} options={PERIOD_OPTIONS} value={periodDays} onChange={onPeriodChange} />
-        <SegmentedControl legend={copy.format} options={FORMAT_OPTIONS} value={contentFilter} onChange={onContentFilterChange} />
-        <ResultLimitField value={limitInput} onChange={onLimitChange} onCommit={onLimitCommit} />
-      </div>
-      <div className={styles["search-panel__submit"]}>
-        <ActionButton type="submit" wide icon="→" iconPosition="end" disabled={!canStartDemo(niche) || view.loader !== null}>{view.loader ? copy.submitting : copy.submit}</ActionButton>
-      </div>
-      {view.loader === "breakdown" && <LoadingStatus stage="breakdown" />}
-      {view.breakdown && <FormalizationPanel contentFilter={contentFilter} />}
-      {view.loader === "posts" && <LoadingStatus stage="posts" />}
-      {view.results && <a className={styles["search-panel__jump"]} href="#results-title">{copy.jump}</a>}
-    </form>
-  </section>;
+const { LOADING, READY, ERROR } = NICHE_REQUEST_STATUS;
+const { sectionAria, eyebrow, title, period, format, submit, submitting } =
+  SEARCH_COPY;
+const { SUBMIT_ARROW } = ICONS;
+const { SUBMIT } = BUTTON_TYPE;
+const {
+  "search-panel": panelClass,
+  "search-panel__form": formClass,
+  "search-panel__heading": headingClass,
+  "search-panel__eyebrow": eyebrowClass,
+  "search-panel__title": titleClass,
+  "search-panel__controls": controlsClass,
+  "search-panel__submit": submitClass,
+  "search-panel__error": errorClass,
+} = styles;
+
+export function SearchPanel({
+  niche,
+  periodDays,
+  contentFilter,
+  limitInput,
+  request,
+  onNicheChange,
+  onPeriodChange,
+  onContentFilterChange,
+  onLimitChange,
+  onLimitCommit,
+  onSubmit,
+}: SearchPanelProps) {
+  const { status } = request;
+  const isLoading = status === LOADING;
+  const isReady = status === READY;
+  const isError = status === ERROR;
+
+  function renderLoading() {
+    return <LoadingStatus stage={LOADING_STAGE.BREAKDOWN} />;
+  }
+
+  function renderReady({
+    input,
+    data,
+  }: Extract<NicheRequestState, { status: typeof READY }>) {
+    return (
+      <FormalizationPanel
+        contentFilter={contentFilter}
+        input={input}
+        data={data}
+      />
+    );
+  }
+
+  function renderError({
+    message,
+  }: Extract<NicheRequestState, { status: typeof ERROR }>) {
+    return (
+      <p className={errorClass} {...ROLE_PROPS.ALERT}>
+        {message}
+      </p>
+    );
+  }
+
+  return (
+    <section className={panelClass} aria-label={sectionAria}>
+      <form
+        className={formClass}
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSubmit();
+        }}
+      >
+        <div className={headingClass}>
+          <p className={eyebrowClass}>{eyebrow}</p>
+          <h2 className={titleClass}>{title}</h2>
+        </div>
+        <NicheInput value={niche} onChange={onNicheChange} />
+        <div className={controlsClass}>
+          <SegmentedControl
+            legend={period}
+            options={PERIOD_OPTIONS}
+            value={periodDays}
+            onChange={onPeriodChange}
+          />
+          <SegmentedControl
+            legend={format}
+            options={FORMAT_OPTIONS}
+            value={contentFilter}
+            onChange={onContentFilterChange}
+          />
+          <ResultLimitField
+            value={limitInput}
+            onChange={onLimitChange}
+            onCommit={onLimitCommit}
+          />
+        </div>
+        <div className={submitClass}>
+          <ActionButton
+            type={SUBMIT}
+            wide
+            icon={SUBMIT_ARROW}
+            iconPosition={BUTTON_ICON_POSITION.END}
+            disabled={!niche.trim() || isLoading}
+          >
+            {isLoading ? submitting : submit}
+          </ActionButton>
+        </div>
+        {isLoading && renderLoading()}
+        {isReady && renderReady(request)}
+        {isError && renderError(request)}
+      </form>
+    </section>
+  );
 }

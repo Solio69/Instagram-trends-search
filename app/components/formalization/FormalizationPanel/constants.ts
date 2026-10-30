@@ -1,11 +1,13 @@
+import { REELS_LABEL } from "../../../constants/options";
+
 export const FORMALIZATION_COPY = {
   eyebrow: "Разбор запроса",
   title: "Как запрос станет данными для поиска",
-  badge: "Пример · модель не подключена",
+  badge: "Разбор OpenRouter",
   samplePrefix: "Для фразы",
   intent: "Общая тема",
-  languages: "Языки поиска",
   format: "Формат выдачи",
-  reels: "Reels",
+  allFormats: "Reels · Посты · Карусели",
+  reels: REELS_LABEL,
   posts: "Посты · Карусели",
 } as const;

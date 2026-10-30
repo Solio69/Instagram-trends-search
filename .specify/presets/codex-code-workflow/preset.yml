@@ -4,7 +4,7 @@ preset:
   id: "codex-code-workflow"
   name: "Codex Code Workflow"
   version: "0.1.0"
-  description: "Stack-agnostic Spec Kit templates for an agreed, test-first coding workflow."
+  description: "Project workflow with agreed scope, test-first coding, required review, and quality gate."
 
 requires:
   speckit_version: ">=0.8.15"
@@ -15,7 +15,7 @@ provides:
       name: "tasks-template"
       file: "templates/tasks-template.md"
       strategy: "replace"
-      description: "Require Red, Green, Refactor tasks for code changes."
+      description: "Require Red, Green, Refactor, review, and gate tasks for code changes."
     - type: "command"
       name: "speckit.specify"
       file: "commands/speckit.specify.md"
@@ -35,7 +35,7 @@ provides:
       name: "speckit.implement"
       file: "commands/speckit.implement.md"
       strategy: "prepend"
-      description: "Require evidence of Red, Green, Refactor and final verification."
+      description: "Require Red, Green, Refactor, post-code review, and final verification."
 
 tags:
   - "codex"

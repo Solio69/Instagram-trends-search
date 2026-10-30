@@ -2,6 +2,11 @@
 
 These rules apply to development tasks in this repository. Follow the current user request, `.specify/memory/constitution.md`, and any more specific project rules.
 
+Правила стиля кода и обязательный шаг ревью после реализации находятся в
+[`docs/code-style.md`](docs/code-style.md) и отдельном
+[скилле `speckit-code-review`](.agents/skills/speckit-code-review/SKILL.md).
+Команда проверки проекта — `npm run check`.
+
 ## Language
 
 - Reply in the language the user used to address you, unless they explicitly request another language.

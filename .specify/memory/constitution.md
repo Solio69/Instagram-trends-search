@@ -1,50 +1,77 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+Версия: шаблон без версии → 1.0.0 (первое принятие).
+Новые принципы: согласованный объём; сохранение поведения; поддерживаемый код;
+проверка и ревью; документация и Git.
+Новые разделы: технические ограничения; процесс разработки.
+Удалены: только шаблонные плейсхолдеры.
+Синхронизация: docs/code-style.md ✅; отдельный speckit-code-review ✅;
+установленный speckit-implement ✅; шаблон задач пресета ✅; AGENTS.md ✅.
+Официальные spec-template.md и plan-template.md не требуют изменений.
+-->
+# Конституция проекта coding-interview
 
-## Core Principles
+## Основные принципы
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Согласованный объём
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+До реализации задачи агент изучает относящийся к ней контекст, обсуждает
+существенные варианты и фиксирует согласованные границы и критерии приёмки.
+Нельзя придумывать продуктовые требования или менять согласованный объём без
+нового обсуждения. Это сохраняет контроль пользователя над продуктом.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Сохранение поведения и контрактов
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Рефакторинг сохраняет наблюдаемое поведение, HTTP-контракт, тексты и DOM, если
+задача прямо не требует их изменения. Новое или изменённое проверяемое
+поведение реализуется через Red → Green → Refactor. Тестовый сбой из-за
+окружения или импорта не считается доказательством Red.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Поддерживаемый код
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Код соответствует [стилю проекта](../../docs/code-style.md). Решение должно
+быть понятным и соразмерным текущей задаче: повторение устраняется там, где
+оно реально мешает сопровождению, а абстракции вводятся при конкретной нужде.
+Подробные правила и примеры хранятся только в style guide.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Проверка и ревью после кода
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+После завершения изменений кода и до итогового отчёта агент выполняет
+[скилл ревью](../../.agents/skills/speckit-code-review/SKILL.md) для diff
+по спецификации, конституции и style guide, исправляет найденные проблемы и
+повторяет затронутые проверки. Полный gate `npm run check` обязателен для
+изменений кода. Результаты и оставшиеся ограничения фиксируются в
+`review.md` и `verification.md` задачи; непроведённая проверка не объявляется
+успешной.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Прослеживаемость и Git
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+Для задачи сохраняются применимые артефакты Spec Kit: спецификация, план,
+задачи, отдельный полный отчёт анализа, ревью и проверка результата. Изменения
+Git-истории, отправка и публикация требуют отдельного разрешения пользователя.
+Чужие изменения в рабочем дереве не включаются в собственный коммит.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+## Технические ограничения
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Применяйте реальный стек и команды репозитория. Новые зависимости и внешние
+системы требуют конкретной причины и обсуждения. Секреты не записываются в
+репозиторий, клиентский код, логи или тестовые фикстуры.
+
+## Процесс разработки
+
+После согласования задачи агент создаёт `spec.md`, `plan.md` и `tasks.md`,
+проводит read-only анализ и отдельным действием сохраняет полный отчёт в
+`analysis.md`. После реализации выполняются ревью, gate и проверка diff.
+Изменения без проверяемого поведения получают соразмерную проверку вместо
+искусственного теста. Блокирующие замечания устраняются до завершения задачи.
+
+## Управление конституцией
+
+Изменения принципов сначала обсуждаются и явно согласуются с пользователем.
+Версия повышается по Semantic Versioning: MAJOR для несовместимого изменения
+правил, MINOR для нового принципа или существенного расширения, PATCH для
+уточнения без изменения смысла. Каждое изменение содержит Sync Impact Report,
+проверку зависимых инструкций и дату. Соответствие конституции проверяется в
+плане задачи и в обязательном ревью после реализации.
+
+**Версия**: 1.0.0 | **Принята**: 2026-10-30 | **Изменена**: 2026-10-30
