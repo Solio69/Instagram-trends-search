@@ -12,7 +12,9 @@ metadata:
 
 ## Standing requirements for this preset
 
-Before changing production behavior, verify the corresponding automated test fails for the expected behavior gap (Red). Then make the smallest implementation pass (Green), refactor if useful, and rerun affected tests. Keep test and production changes within the agreed `spec.md` scope. If no meaningful executable behavior changes, use the alternative verification documented in `plan.md`; do not create a test solely to satisfy a ritual. Record final commands and results in `verification.md` with Passed, Failed, Blocked, or NotRun. A missing tool, import error, or broken environment is Blocked, not a successful Red. The official implementation workflow follows below.
+Before changing production behavior, verify the corresponding automated test fails for the expected behavior gap (Red). Then make the smallest implementation pass (Green), refactor if useful, and rerun affected tests. Keep test and production changes within the agreed `spec.md` scope. If no meaningful executable behavior changes, use the alternative verification documented in `plan.md`; do not create a test solely to satisfy a ritual. Record final commands and results in `verification.md` with Passed, Failed, Blocked, or NotRun. A missing tool, import error, or broken environment is Blocked, not a successful Red.
+
+After the last code change, and before after-implement hooks or the completion report, invoke `$speckit-code-review` from `.agents/skills/speckit-code-review/SKILL.md` as a mandatory step. Do not report completion until its blocking findings are resolved and required checks are recorded. The official implementation workflow follows below.
 
 
 
@@ -225,5 +227,7 @@ Report final status with summary of completed work.
 
 - [ ] All tasks in tasks.md completed and marked `[X]`
 - [ ] Implementation validated against specification, plan, and test coverage
+- [ ] `.agents/skills/speckit-code-review/SKILL.md` followed and review recorded in `review.md`; blocking findings resolved
+- [ ] `npm run check` passed for code changes and actual results recorded in `verification.md`
 - [ ] Extension hooks dispatched or skipped according to the rules in Mandatory Post-Execution Hooks above
 - [ ] Completion reported to user with summary of completed work

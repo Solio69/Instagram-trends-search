@@ -28,7 +28,8 @@ description: "Test-first tasks for a bounded Spec Kit code change"
 
 - [ ] TXXX Run the read-only `$speckit-analyze` pass after completing tasks.md; save the full report separately in `analysis.md`, resolve blocking findings, and rerun analysis when artifacts change.
 - [ ] TXXX Run the checks chosen in `plan.md`; record commands, Passed/Failed/Blocked/NotRun and evidence in `verification.md`.
-- [ ] TXXX Review the diff against `spec.md`, confirm scope and secret hygiene, and report remaining limitations.
+- [ ] TXXX After writing code, invoke `$speckit-code-review` from `.agents/skills/speckit-code-review/SKILL.md`; record findings and fixes in `review.md`, resolve blocking findings, then rerun required checks.
+- [ ] TXXX Confirm scope and secret hygiene, record remaining limitations, and report gate results.
 
 ## Dependencies
 
@@ -40,4 +41,6 @@ description: "Test-first tasks for a bounded Spec Kit code change"
 - [ ] Affected tests pass after Green and Refactor.
 - [ ] The saved `analysis.md` has no unresolved blocking finding.
 - [ ] `verification.md` honestly records performed and unperformed checks.
+- [ ] The mandatory `speckit-code-review` skill is completed and recorded in `review.md` with no unresolved blocking findings.
+- [ ] `npm run check` passes for code changes after the final fix.
 - [ ] Changes match the agreed scope; Git actions follow the task-specific authorization.

@@ -4,11 +4,15 @@ import { SiteHeader } from "./components/layout/SiteHeader";
 import { TrendExplorer } from "./components/TrendExplorer";
 import styles from "./page.module.scss";
 
+const { page } = styles;
+
 export default function HomePage() {
-  return <main className={styles.page}>
-    <SiteHeader />
-    <Hero />
-    <TrendExplorer />
-    <SiteFooter />
-  </main>;
+  return (
+    <main className={page}>
+      <SiteHeader />
+      <Hero />
+      <TrendExplorer />
+      <SiteFooter />
+    </main>
+  );
 }

@@ -1,100 +1,99 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { DEMO_POSTS, DEMO_SOURCE } from "../../constants/demo";
-import { advanceDemoStage, canStartDemo, getDemoView, type DemoStage } from "../../lib/demo-flow";
-import { getVisiblePosts, normalizeResultLimit, type ContentFilter, type PeriodDays, type SortMetric } from "../../lib/results";
-import { ResultsSection } from "../results/ResultsSection";
+import { useRef, useState } from "react";
+import { HTTP_METHOD, JSON_REQUEST_HEADERS } from "../../constants/http";
+import {
+  NICHE_API_FIELD,
+  NICHE_NORMALIZE_ENDPOINT,
+  NICHE_REQUEST_STATUS,
+  NORMALIZATION_FAILED_MESSAGE,
+} from "../../constants/niche-request";
+import { EMPTY_STRING } from "../../constants/text";
+import type { NicheNormalization } from "../../lib/niche-normalization";
+import type { NicheRequestState } from "../../lib/niche-request-state";
+import {
+  CONTENT_FILTER,
+  normalizeResultLimit,
+  RESULT_LIMITS,
+  type ContentFilter,
+  type PeriodDays,
+} from "../../lib/results";
+import { isObjectLikeRecord, isPrimitiveString } from "../../lib/type-guards";
 import { SearchPanel } from "../search/SearchPanel";
 
+const { IDLE, LOADING, READY, ERROR } = NICHE_REQUEST_STATUS;
+
 export function TrendExplorer() {
-  const [niche, setNiche] = useState("");
+  const [niche, setNiche] = useState(EMPTY_STRING);
   const [periodDays, setPeriodDays] = useState<PeriodDays>(3);
-  const [contentFilter, setContentFilter] = useState<ContentFilter>("all");
-  const [limitInput, setLimitInput] = useState("50");
-  const [sortBy, setSortBy] = useState<SortMetric>("likeCount");
-  const [selectedKeywords, setSelectedKeywords] = useState<string[]>([]);
-  const [stage, setStage] = useState<DemoStage>("idle");
-  const resultsRef = useRef<HTMLElement>(null);
-  const limit = normalizeResultLimit(Number(limitInput || 50));
-  const view = getDemoView(stage);
-  const visiblePosts = useMemo(
-    () => getVisiblePosts(DEMO_POSTS, { periodDays, contentFilter, limit, sortBy, keywords: selectedKeywords }, DEMO_SOURCE.snapshotAt),
-    [periodDays, contentFilter, limit, sortBy, selectedKeywords],
+  const [contentFilter, setContentFilter] = useState<ContentFilter>(
+    CONTENT_FILTER.ALL,
   );
-
-  useEffect(() => {
-    if (stage !== "loading-breakdown" && stage !== "loading-posts") return;
-    const timer = window.setTimeout(() => setStage((current) => advanceDemoStage(current)), 1000);
-    return () => window.clearTimeout(timer);
-  }, [stage]);
-
-  useEffect(() => {
-    if (stage !== "complete") return;
-    resultsRef.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
-  }, [stage]);
+  const [limitInput, setLimitInput] = useState(String(RESULT_LIMITS.MAX));
+  const [request, setRequest] = useState<NicheRequestState>({ status: IDLE });
+  const requestVersion = useRef(0);
+  const limit = normalizeResultLimit(Number(limitInput || RESULT_LIMITS.MAX));
 
   function changeNiche(value: string) {
+    requestVersion.current++;
     setNiche(value);
-    setStage("idle");
+    setRequest({ status: IDLE });
   }
 
-  function showTrends() {
-    if (!canStartDemo(niche)) return;
-    setSelectedKeywords([]);
-    setStage("loading-breakdown");
+  async function normalize() {
+    const submittedNiche = niche.trim();
+    if (!submittedNiche || request.status === LOADING) return;
+    const currentVersion = ++requestVersion.current;
+    setRequest({ status: LOADING });
+
+    try {
+      const response = await fetch(NICHE_NORMALIZE_ENDPOINT, {
+        method: HTTP_METHOD.POST,
+        headers: JSON_REQUEST_HEADERS,
+        body: JSON.stringify({ [NICHE_API_FIELD.NICHE]: submittedNiche }),
+      });
+      const payload: unknown = await response.json();
+      if (currentVersion !== requestVersion.current) return;
+      if (!response.ok) {
+        const errorMessage =
+          isObjectLikeRecord(payload) &&
+          NICHE_API_FIELD.ERROR in payload
+            ? payload[NICHE_API_FIELD.ERROR]
+            : undefined;
+        throw new Error(
+          isPrimitiveString(errorMessage)
+            ? errorMessage
+            : NORMALIZATION_FAILED_MESSAGE,
+        );
+      }
+      setRequest({
+        status: READY,
+        input: submittedNiche,
+        data: payload as NicheNormalization,
+      });
+    } catch (cause) {
+      if (currentVersion !== requestVersion.current) return;
+      setRequest({
+        status: ERROR,
+        message:
+          cause instanceof Error ? cause.message : NORMALIZATION_FAILED_MESSAGE,
+      });
+    }
   }
 
-  function toggleKeyword(term: string) {
-    setSelectedKeywords((current) => current.includes(term) ? current.filter((item) => item !== term) : [...current, term]);
-  }
-
-  function downloadJson() {
-    const payload = {
-      source: DEMO_SOURCE.name,
-      sourceRun: DEMO_SOURCE.runUrl,
-      sourceQuery: DEMO_SOURCE.query,
-      snapshotAt: DEMO_SOURCE.snapshotAt,
-      demo: true,
-      filters: { periodDays, contentFilter, limit, sortBy, keywords: selectedKeywords, direction: "desc" },
-      count: visiblePosts.length,
-      posts: visiblePosts,
-    };
-    const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = DEMO_SOURCE.filename;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(url), 0);
-  }
-
-  return <>
+  return (
     <SearchPanel
       niche={niche}
       periodDays={periodDays}
       contentFilter={contentFilter}
       limitInput={limitInput}
-      view={view}
+      request={request}
       onNicheChange={changeNiche}
       onPeriodChange={setPeriodDays}
       onContentFilterChange={setContentFilter}
       onLimitChange={setLimitInput}
       onLimitCommit={() => setLimitInput(String(limit))}
-      onSubmit={showTrends}
+      onSubmit={normalize}
     />
-    {view.results && <ResultsSection
-      posts={visiblePosts}
-      totalCount={DEMO_POSTS.length}
-      periodDays={periodDays}
-      sortBy={sortBy}
-      selectedKeywords={selectedKeywords}
-      onSort={setSortBy}
-      onKeywordToggle={toggleKeyword}
-      onKeywordClear={() => setSelectedKeywords([])}
-      onDownload={downloadJson}
-      sectionRef={resultsRef}
-    />}
-  </>;
+  );
 }

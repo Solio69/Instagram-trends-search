@@ -1,1 +1,3 @@
-export const FOOTER_COPY = { note: "Прототип интерфейса · поиск и модель будут подключены позже" } as const;
+export const FOOTER_COPY = {
+  note: "Прототип · разбор ниши через OpenRouter; поиск публикаций подключим позже",
+} as const;
